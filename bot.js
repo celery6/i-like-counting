@@ -3,46 +3,38 @@ const Discord = require('discord.js');
 const { prefix, token } = require('./config.json');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
-
-const whitelist = ['306529453826113539', '682042083024044161']; //ARRAY OF WHITELISTED PEOPLE
-
+const whitelist = ['306529453826113539', '682042083024044161']; //whitelist
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const cooldowns = new Discord.Collection();
+
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
 
-const cooldowns = new Discord.Collection();
-
-client.once('ready', () => {
-	console.log('uwu im here');
-});
 
 client.on('message', message => {
-	if (message.author.bot) return; //IF BOT AUTHOR, EXIT
-
-	const security = message.content.toLowerCase().trim().split(' '); //RESPOND TO NAME AND SCHOL
+	const security = message.content.toLowerCase().trim().split(' '); //security response
 	if (security.includes('name') && security.includes('school')) {
 		return message.reply('MY NAME IS "BOTBOT", I ATTEND OTHER SECONDARY SCHOOL');
 	}
 
+	if (message.author.bot) return; //exit if bot msg
 	if (!message.content.startsWith(prefix)) return;
 
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
-
 	const command = client.commands.get(commandName)
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
-	if (!command) return; //IF COMMAND EXISTS, CONTINUE ON
+	if (!command) return;
 	
-	if (command.noAdmin === false) { //CHECK IF PERSON IS WHITELISTED!
-		if (!whitelist.includes(message.author.id)) { //IF PERSON IS NOT ON WHITELIST, EXIT
+	if (command.noAdmin === false) { //check whitelist
+		if (!whitelist.includes(message.author.id)) {
 			return;
 		} 
 	}
-	
 	
 	if (!cooldowns.has(command.name)) {
 		cooldowns.set(command.name, new Discord.Collection());
@@ -75,3 +67,6 @@ client.on('message', message => {
 });
 
 client.login(token);
+client.once('ready', () => {
+	console.log('uwu im here');
+});
