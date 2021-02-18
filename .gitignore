@@ -1,3 +1,5 @@
 node_modules/
 config.json
 theCount.json
+.vs/
+.vscode/
