@@ -9,26 +9,25 @@ module.exports = {
 		let count1 = {};
 		let count2 = {};
 
-		const today = new Date(); //REACT FOR CHRSITMSTASAHAHAHAHAHAHAH
 
 		client.on('message', message => {
-			fs.readFile('./theCount.json', 'utf8', (err, jsonString) => {   //FIRST CHECK IF STOPPED
+			fs.readFile('./theCount.json', 'utf8', (err, jsonString) => {   //check if stopped ?
 				if (err) {
 					console.log("theCount file read failed:", err)
 				}
-				try { //THINGS TO DO AFTER GETTING THE CURRENT COUNT FILE
+				try {
 					jsonFile = JSON.parse(jsonString);
 					const rightCount = jsonFile.theCountNow;
 
 
 					const channel = message.channel;
 					const pingChannel = client.channels.cache.find(pingChannel => pingChannel.id === ping);
-					if (channel.id !== countingChannel) return;  //CHECK IF CHANNEL IS COUNTING CHANNEL 
+					if (channel.id !== countingChannel) return;  //check for channel
 
 					
-					if (message.author.bot) return; //OR IF ITS A BOT MSG
+					if (message.author.bot) return; //check for bot msg
 
-					if (isNaN(message.content)) {    //CHECK IF ITS A NUMBER!
+					if (isNaN(message.content)) {    //check for NaN
 						pingChannel.send(`bopBOP THATS NOT A NUMBER IDOT MOMENT! <@${message.author.id}> DELETE THAT ***NOW!***`);
 						message.channel.send('COUNTING FAILURE!!!!!! :ytdfu6vgch: :ytdfu6vgch:  ');
 						return;
@@ -50,19 +49,17 @@ module.exports = {
 						return
 					} 
 					//CHECK IF 1 PERSON IS SPAMMING
-
-
 					//___________________________________________________________________________________________________
 							
-							if (message.content != rightCount) {	//CHECK IF THE MESSAGE IS CORRECT.!
+							if (message.content != rightCount) {	//check for correct count
 								pingChannel.send(`WTF!!!!! ***COUNTING FAILURE!*** <@${message.author.id}> PLEASE EDIT IT TO ${rightCount}AND DON'T DELETE IT!!!!!!!!!! :pleading_face: `);
 								message.channel.send('COUNTING FAILURE!!!!!! :ytdfu6vgch:');
 							}
 
-							const newCount = rightCount + 1;   //ADD 1 TO THE CORRECT COUNT
+							const newCount = rightCount + 1;   //add 1 to count
 							console.log(`UPDATING THE COUNT TO: ${newCount}`);
 
-							let updatedFile = {     //WRITE THE NEW COUNT TO FILE
+							let updatedFile = {     //write count to file
 								theCountNow: newCount
 							};
 							let data = JSON.stringify(updatedFile);
