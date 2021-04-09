@@ -9,7 +9,6 @@ module.exports = {
 		let count1 = {};
 		let count2 = {};
 
-		//DATABASE!!
 
 		client.on('message', message => {
 			fs.readFile('./theCount.json', 'utf8', (err, jsonString) => {   //check if stopped ?
