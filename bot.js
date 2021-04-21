@@ -1,6 +1,6 @@
 const fs = require('fs')
 const Discord = require('discord.js')
-const { prefix, token, password } = require('./config.json')
+const { prefix, token, uri } = require('./config.json')
 const client = new Discord.Client()
 client.commands = new Discord.Collection()
 const whitelist = ['306529453826113539', '682042083024044161'] //whitelist
@@ -16,7 +16,6 @@ for (const file of commandFiles) {
 }
 
 //mango connection
-const uri = `mongodb://admin:${password}@192.168.1.102:27017`
 const mango = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
