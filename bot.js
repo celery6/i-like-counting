@@ -4,32 +4,35 @@ const { prefix, token, password } = require('./config.json')
 const client = new Discord.Client()
 client.commands = new Discord.Collection()
 const whitelist = ['306529453826113539', '682042083024044161'] //whitelist
-const mysql = require('mysql')
 const commandFiles = fs
     .readdirSync('./commands')
     .filter((file) => file.endsWith('.js'))
 const cooldowns = new Discord.Collection()
+const { MongoClient } = require('mongodb')
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`)
     client.commands.set(command.name, command)
 }
 
-const con = mysql.createConnection({
-    //mysql connect
-    host: 'localhost',
-    user: 'root',
-    password: password,
-    database: 'uwu',
+//mango connection
+const uri = `mongodb://admin:${password}@192.168.1.102:27017`
+const mango = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 })
+async function connect() {
+    try {
+        await mango.connect()
+    } catch (err) {
+        console.log('MANGO ERROR' + err)
+    }
+}
+connect()
 
-con.connect(function (err) {
-    if (err) throw err
-    console.log('Connected!')
-})
-
+//
 client.on('message', (message) => {
-    const security = message.content.toLowerCase().trim().split(' ') //security re sponse
+    const security = message.content.toLowerCase().trim().split(' ') //security response
     if (security.includes('name') && security.includes('school')) {
         return message.reply(
             'MY NAME IS "BOTBOT", I ATTEND OTHER SECONDARY SCHOOL'
@@ -91,7 +94,7 @@ client.on('message', (message) => {
     setTimeout(() => timestamps.delete(message.guild.id), cooldownAmount)
 
     try {
-        command.execute(message, args, client, con)
+        command.execute(message, args, client, mango)
     } catch (error) {
         console.error(error)
         message.reply('ERROR HAPPENED IDOT!')
