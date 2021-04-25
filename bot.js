@@ -31,9 +31,11 @@ async function connect() {
 connect()
 const db = mango.db('counting')
 
-//
 client.on('message', (message) => {
     if (message.author.bot) return //exit if bot msg
+    //do counting
+    const count = client.commands.get('count')
+    count.execute(message, client, db)
 
     const security = message.content.toLowerCase().trim().split(' ') //security response
     if (security.includes('name') && security.includes('school')) {
