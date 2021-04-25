@@ -1,27 +1,23 @@
-module.exports ={
+module.exports = {
     name: 'number',
-	cooldown: 0,
-	noAdmin: false,
-    execute(msg, args, client) {
-        
-const inputCount = args[0];    
-        //ENSURE THE ARGUMENT IS A NUMBER
+    cooldown: 0,
+    noAdmin: false,
+    execute(msg, args, client, db) {
+        const inputCount = args[0]
+
         if (isNaN(args[0])) {
-            return msg.channel.send('idot THATS NOT A NUMBER 23J42390420J09DF0DFUFUSU9EU90F9USFUSIOFJKL!!!!!');
-        } else {
-            msg.channel.send(`ok, u are at ${inputCount}`);
+            return msg.channel.send(
+                'idot THATS NOT A NUMBER 23J42390420J09DF0DFUFUSU9EU90F9USFUSIOFJKL!!!!!'
+            )
         }
-		const fs = require('fs');
 
-        const inputCountInteger = parseInt(inputCount,10);
-
-        let count = { 
-            theCountNow: inputCountInteger
-        };
-         
-        let data = JSON.stringify(count);
-        fs.writeFileSync('theCount.json', data);
-
-    }
-
+        ;(async function () {
+            const current = db.collection('current')
+            await current.updateOne(
+                { id: 'currentId' },
+                { $set: { current: inputCount } }
+            )
+            msg.channel.send(`ok, u are at ${inputCount}`)
+        })()
+    },
 }

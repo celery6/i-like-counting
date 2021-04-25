@@ -1,20 +1,12 @@
 module.exports = {
     name: 'stop',
-	cooldown: 0,
-	noAdmin: false,
-    execute(message, args, client) {
-
-
-        const fs = require('fs');
-
-        let stopping = { 
-            stopped: true
-        };
-         
-        let data = JSON.stringify(stopping);
-        fs.writeFileSync('stopCounting.json', data);
-
-        message.channel.send('STOPPED WATCHING COUNTS!! SOBSOBSSOB :sob:!');
-
-    } 
-};
+    cooldown: 0.5,
+    noAdmin: false,
+    execute(message, args, client, db) {
+        ;(async function run() {
+            doc = db.collection('stop')
+            await doc.updateOne({ id: 'stopId' }, { $set: { stopped: true } })
+            message.channel.send('STOPPED WATCHING COUNTS!! SOBSOBSSOB :sob:!')
+        })()
+    },
+}
