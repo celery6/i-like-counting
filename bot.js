@@ -23,14 +23,18 @@ const mango = new MongoClient(uri, {
 async function connect() {
     try {
         await mango.connect()
+        console.log('CONNECTED TO MANGO!')
     } catch (err) {
         console.log('MANGO ERROR' + err)
     }
 }
 connect()
+const db = mango.db('counting')
 
 //
 client.on('message', (message) => {
+    if (message.author.bot) return //exit if bot msg
+
     const security = message.content.toLowerCase().trim().split(' ') //security response
     if (security.includes('name') && security.includes('school')) {
         return message.reply(
@@ -38,7 +42,6 @@ client.on('message', (message) => {
         )
     }
 
-    if (message.author.bot) return //exit if bot msg
     if (!message.content.startsWith(prefix)) return
 
     const args = message.content.slice(prefix.length).trim().split(/ +/)
@@ -93,7 +96,7 @@ client.on('message', (message) => {
     setTimeout(() => timestamps.delete(message.guild.id), cooldownAmount)
 
     try {
-        command.execute(message, args, client, mango)
+        command.execute(message, args, client, db)
     } catch (error) {
         console.error(error)
         message.reply('ERROR HAPPENED IDOT!')
