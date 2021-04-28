@@ -59,18 +59,27 @@ module.exports = {
                     message.reply('DONT COUNT TWICE IN A ROW STUPID IDOT')
                     return
                 }*/
+                const sequenceValues = await incId(db)
 
                 if (Number(message.content) != rightCount) {
-                    //check for correct count
+                    //wrong number send error and record it
                     pingChannel.send(
                         `WTF!!!!! ***COUNTING FAILURE!*** <@${message.author.id}> PLEASE EDIT IT TO ${rightCount}AND DON'T DELETE IT!!!!!!!!!! :pleading_face: `
                     )
-                    message.channel.send('COUNTING FAILURE!!!!!! :ytdfu6vgch:')
+                    const errorMsg = await message.channel.send(
+                        'COUNTING FAILURE!!!!!! :ytdfu6vgch:'
+                    )
+                    const errorDoc = {
+                        _id: sequenceValues[0],
+                        countId: message.id,
+                        errorId: errorMsg,
+                    }
+                    await db.collection('errors').insertOne(errorDoc)
                 }
 
                 //add count info to db
                 const countDoc = {
-                    _id: await incId(db),
+                    _id: await incId(db)[0],
                     content: message.content,
                     user: message.author.id,
                     timestamp: date,
@@ -90,6 +99,5 @@ module.exports = {
         }
 
         run(message).catch(console.dir)
-        message.channel.send('STARTED WATCHING COUNTS YASSSS!!!')
     },
 }
