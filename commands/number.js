@@ -3,7 +3,7 @@ module.exports = {
     cooldown: 0,
     noAdmin: false,
     execute(msg, args, client, db) {
-        const inputCount = args[0]
+        const inputCount = Number(args[0])
 
         if (isNaN(args[0])) {
             return msg.channel.send(
