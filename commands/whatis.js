@@ -2,23 +2,14 @@ module.exports = {
     name: 'whatis',
     cooldown: 0.5,
     noAdmin: true,
-    execute(msg, args) {
-        const fs = require('fs')
+    execute(msg, args, client, db) {
+        async function run() {
+            current = db.collection('current')
+            const currentCountDoc = await current.findOne()
+            const currentCount = currentCountDoc.current
 
-        //ASYNC READ FILE!!!!!!!!!!!!!!!!!!!!!
-        fs.readFile('./theCount.json', 'utf8', (err, jsonString) => {
-            if (err) {
-                console.log('File read failed:', err)
-                return
-            }
-            try {
-                let config = JSON.parse(jsonString)
-                msg.channel.send(
-                    `the next count is: ${config.theCountNow}!!!!!!!!!!!!`
-                )
-            } catch (err) {
-                console.log('json string parse error', err)
-            }
-        })
+            msg.reply(`the next count is: ${currentCount}!!!!!!!!!!!!!!!!!!`)
+        }
+        run()
     },
 }
