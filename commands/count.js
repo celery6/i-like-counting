@@ -69,10 +69,11 @@ module.exports = {
                     const errorMsg = await message.channel.send(
                         'COUNTING FAILURE!!!!!! :ytdfu6vgch:'
                     )
+
                     const errorDoc = {
                         _id: sequenceValues[0],
                         countId: message.id,
-                        errorId: errorMsg,
+                        errorId: errorMsg.id,
                     }
                     await db.collection('errors').insertOne(errorDoc)
                 }

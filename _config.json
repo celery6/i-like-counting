@@ -1,7 +1,8 @@
 {
-    "token": "insert-token",
+    "token": "tokentoken",
     "prefix": "'",
-    "countingChannel": "00000000000",
-    "ping": "0000000000",
-    "currentCount": 0
+    "countingChannel": "0000000000000",
+    "ping": "00000000000000000",
+    "uri": "",
+    "database": ""
 }
