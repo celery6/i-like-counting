@@ -5,12 +5,11 @@ async function incId(db) {
     const collection = db.collection('counters')
     const doc = await collection.findOne()
     const currentId = doc.sequence_value
-    const result = await collection.updateOne(
+    await collection.updateOne(
         { _id: 'sequence' },
         { $inc: { sequence_value: 1 } }
     )
-    //  console.log('UPDATING ID TO!!:  ' + nextId)
-    return [currentId + 1, currentId]
+    return { current: currentId, last: currentId - 1 }
 }
 
 module.exports = {
@@ -43,7 +42,7 @@ module.exports = {
                     )
                     return
                 }
-
+                const counts = db.collection('counts')
                 const current = db.collection('current')
                 const currentCountDoc = await current.findOne()
                 const rightCount = currentCountDoc.current
@@ -51,15 +50,25 @@ module.exports = {
                 let date = new Date(message.createdTimestamp)
                 let minute = date.getMinutes()
 
+                const ids = await incId(db)
+
                 //CHECK IF 1 PERSON IS SPAMMING
-                /*if (count1.authorId === count2.authorId) {
+                const lastCount = await counts.findOne({ _id: ids.last })
+
+                if (message.author.id === lastCount.user) {
                     pingChannel.send(
                         `YOU CANT COUNT TWICE IN A ROW <@${message.author.id}>:-1: :angry:`
                     )
-                    message.reply('DONT COUNT TWICE IN A ROW STUPID IDOT')
+                    const errorMsg = await message.reply(
+                        'DONT COUNT TWICE IN A ROW STUPID IDOT'
+                    )
+                    const errorDoc = {
+                        countId: message.id,
+                        errorId: errorMsg.id,
+                    }
+                    await db.collection('errors').insertOne(errorDoc)
                     return
-                }*/
-                const sequenceValues = await incId(db)
+                }
 
                 if (Number(message.content) != rightCount) {
                     //wrong number send error and record it
@@ -69,23 +78,24 @@ module.exports = {
                     const errorMsg = await message.channel.send(
                         'COUNTING FAILURE!!!!!! :ytdfu6vgch:'
                     )
+
                     const errorDoc = {
-                        _id: sequenceValues[0],
+                        _id: ids.current,
                         countId: message.id,
-                        errorId: errorMsg,
+                        errorId: errorMsg.id,
                     }
                     await db.collection('errors').insertOne(errorDoc)
                 }
 
                 //add count info to db
                 const countDoc = {
-                    _id: await incId(db)[0],
+                    _id: ids.current,
                     content: message.content,
                     user: message.author.id,
                     timestamp: date,
                 }
 
-                await db.collection('counts').insertOne(countDoc)
+                await counts.insertOne(countDoc)
 
                 // update current count
                 const newCount = rightCount + 1

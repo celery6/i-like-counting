@@ -1,6 +1,6 @@
 const fs = require('fs')
 const Discord = require('discord.js')
-const { prefix, token, uri } = require('./config.json')
+const { prefix, token, uri, database } = require('./config.json')
 const client = new Discord.Client()
 client.commands = new Discord.Collection()
 const whitelist = ['306529453826113539', '682042083024044161'] //whitelist
@@ -29,7 +29,7 @@ async function connect() {
     }
 }
 connect()
-const db = mango.db('counting')
+const db = mango.db(database)
 
 client.on('message', (message) => {
     if (message.author.bot) return //exit if bot msg
