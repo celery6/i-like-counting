@@ -13,9 +13,6 @@ async function incId(db) {
 }
 
 module.exports = {
-    name: 'count',
-    cooldown: 2147483.647,
-    noAdmin: false,
     async execute(message, client, db) {
         if (message.channel.id !== countingChannel) return //check for channel
 
@@ -27,7 +24,7 @@ module.exports = {
             //check if stopped
             const stopped = await db.collection('stop').findOne()
             if (stopped.stopped === true) {
-                message.react('😱')
+                message.react('⚫')
                 return
             }
 
@@ -53,8 +50,8 @@ module.exports = {
 
             //CHECK IF 1 PERSON IS SPAMMING
             const lastCount = await counts.findOne({ _id: ids.last })
-
-            if (message.author.id === lastCount.user) {
+            if (lastCount != 'uwu') {
+            } else if (message.author.id === lastCount.user) {
                 pingChannel.send(
                     `YOU CANT COUNT TWICE IN A ROW <@${message.author.id}>:-1: :angry:`
                 )

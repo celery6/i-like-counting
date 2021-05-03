@@ -34,7 +34,7 @@ const db = mango.db(database)
 client.on('message', (message) => {
     if (message.author.bot) return //exit if bot msg
     //do counting
-    const count = client.commands.get('count')
+    const count = require('./counting/count')
     count.execute(message, client, db)
 
     const security = message.content.toLowerCase().trim().split(' ') //security response
