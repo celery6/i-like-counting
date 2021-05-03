@@ -53,8 +53,8 @@ module.exports = {
 
             //CHECK IF 1 PERSON IS SPAMMING
             const lastCount = await counts.findOne({ _id: ids.last })
-
-            if (message.author.id === lastCount.user) {
+            if (lastCount != 'uwu') {
+            } else if (message.author.id === lastCount.user) {
                 pingChannel.send(
                     `YOU CANT COUNT TWICE IN A ROW <@${message.author.id}>:-1: :angry:`
                 )
