@@ -31,6 +31,18 @@ async function connect() {
 connect()
 const db = mango.db(database)
 
+//Ensure nickname is not changed
+client.on('guildMemberUpdate', (oldMember, newMember) => {
+    if (newMember.id !== '791546976675168297') return
+    const newNick = newMember.nickname
+    const oldNick = oldMember.nickname
+
+    if (newNick !== "['] I REALLY LOVE COUNTING!!!") {
+        newMember.setNickname("['] I REALLY LOVE COUNTING!!!")
+    }
+})
+
+//================== On message ==================
 client.on('message', (message) => {
     if (message.author.bot) return //exit if bot msg
     //do counting
