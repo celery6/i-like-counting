@@ -53,9 +53,9 @@ module.exports = {
             )
         }
 
-        if (args[0] > 720 || args[0] < 5) {
+        if (args[0] > 1920 || args[0] < 5) {
             return msg.reply(
-                `YOU're stupid! number must be between 5mins and 720 mins IDOT :man_facepalming:`
+                `YOU're stupid! number must be between 5mins and 1920 mins IDOT :man_facepalming:`
             )
         }
 
