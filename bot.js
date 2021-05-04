@@ -49,7 +49,8 @@ client.on('message', (message) => {
     const count = require('./counting/count')
     count.execute(message, client, db)
 
-    const security = message.content.toLowerCase().trim().split(' ') //security response
+    //security response
+    const security = message.content.toLowerCase().trim().split(' ')
     if (security.includes('name') && security.includes('school')) {
         return message.reply(
             'MY NAME IS "BOTBOT", I ATTEND OTHER SECONDARY SCHOOL'
@@ -120,4 +121,6 @@ client.on('message', (message) => {
 client.login(token)
 client.once('ready', () => {
     console.log('uwu im here')
+    const { onStart } = require('./counting/reminders')
+    onStart(client, db)
 })
