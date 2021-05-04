@@ -6,7 +6,7 @@ async function startReminder(userId, interval, client, db) {
     )
     const intervalId = setInterval(() => {
         pingChannel.send(`reminding <@${userId}> to GO COUNT!`)
-    }, interval * 1000)
+    }, interval * 6000)
 
     await db
         .collection('reminders')
@@ -25,7 +25,9 @@ async function onStart(client, db) {
         if (doc.userId == null) {
             return
         }
-        console.log('starting interval for ' + doc.userId)
+        const stopped = doc.stopped
+        if (stopped) return
+
         startReminder(doc.userId, doc.interval, client, db)
     })
 
