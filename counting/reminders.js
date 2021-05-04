@@ -6,7 +6,7 @@ async function startReminder(userId, interval, client, db) {
     )
     const intervalId = setInterval(() => {
         pingChannel.send(`reminding <@${userId}> to GO COUNT!`)
-    }, interval * 6000)
+    }, interval * 60000)
 
     await db
         .collection('reminders')
