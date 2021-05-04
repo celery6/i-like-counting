@@ -31,13 +31,26 @@ async function connect() {
 connect()
 const db = mango.db(database)
 
+//Ensure nickname is not changed
+client.on('guildMemberUpdate', (oldMember, newMember) => {
+    if (newMember.id !== '791546976675168297') return
+    const newNick = newMember.nickname
+    const oldNick = oldMember.nickname
+
+    if (newNick !== "['] I REALLY LOVE COUNTING!!!") {
+        newMember.setNickname("['] I REALLY LOVE COUNTING!!!")
+    }
+})
+
+//================== On message ==================
 client.on('message', (message) => {
     if (message.author.bot) return //exit if bot msg
     //do counting
-    const count = client.commands.get('count')
+    const count = require('./counting/count')
     count.execute(message, client, db)
 
-    const security = message.content.toLowerCase().trim().split(' ') //security response
+    //security response
+    const security = message.content.toLowerCase().trim().split(' ')
     if (security.includes('name') && security.includes('school')) {
         return message.reply(
             'MY NAME IS "BOTBOT", I ATTEND OTHER SECONDARY SCHOOL'
@@ -108,4 +121,6 @@ client.on('message', (message) => {
 client.login(token)
 client.once('ready', () => {
     console.log('uwu im here')
+    const { onStart } = require('./counting/reminders')
+    onStart(client, db)
 })

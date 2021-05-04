@@ -13,9 +13,6 @@ async function incId(db) {
 }
 
 module.exports = {
-    name: 'count',
-    cooldown: 2147483.647,
-    noAdmin: false,
     async execute(message, client, db) {
         if (message.channel.id !== countingChannel) return //check for channel
 
@@ -27,7 +24,7 @@ module.exports = {
             //check if stopped
             const stopped = await db.collection('stop').findOne()
             if (stopped.stopped === true) {
-                message.react('😱')
+                message.react('⚫')
                 return
             }
 
