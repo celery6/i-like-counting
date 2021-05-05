@@ -62,7 +62,7 @@ module.exports = {
         //if user already set a reminder, update it and stop the old interval, then start new one
         const userExists = await reminders.findOne({ userId: user })
         if (userExists) {
-            const oldInterval = Number(userExists.intervalId)
+            const oldInterval = userExists.intervalId
             clearInterval(oldInterval)
 
             await reminders.updateOne(
