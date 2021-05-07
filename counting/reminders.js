@@ -8,9 +8,6 @@ async function startReminder(userId, interval, client, db) {
         pingChannel.send(`reminding <@${userId}> to GO COUNT!`)
     }, interval * 60000)
 
-    console.log(intervalId)
-    console.log(intervalId[Symbol.toPrimitive]())
-
     await db
         .collection('reminders')
         .updateOne(
