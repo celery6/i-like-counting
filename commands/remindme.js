@@ -69,6 +69,13 @@ module.exports = {
                 { userId: user },
                 { $set: { interval: args[0] } }
             )
+
+            //update stopped value
+
+            await reminders.updateOne(
+                { userId: user },
+                { $set: { stopped: false } }
+            )
             await startReminder(user, args[0], client, db)
 
             return msg.reply(

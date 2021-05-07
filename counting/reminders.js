@@ -6,13 +6,16 @@ async function startReminder(userId, interval, client, db) {
     )
     const intervalId = setInterval(() => {
         pingChannel.send(`reminding <@${userId}> to GO COUNT!`)
-    }, interval * 1000)
+    }, interval * 60000)
+
+    console.log(intervalId)
+    console.log(intervalId[Symbol.toPrimitive]())
 
     await db
         .collection('reminders')
         .updateOne(
             { userId: userId },
-            { $set: { intervalId: `${intervalId}` } }
+            { $set: { intervalId: intervalId[Symbol.toPrimitive]() } }
         )
 }
 
